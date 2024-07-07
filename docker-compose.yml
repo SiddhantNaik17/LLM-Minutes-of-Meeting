@@ -1,0 +1,43 @@
+services:
+  app:
+    build: .
+    image: app
+    pull_policy: never
+    command: python app.py
+    env_file:
+      - .env
+    ports:
+      - 5000:5000
+    volumes:
+      - ./app:/app
+      - ./data:/data
+    depends_on:
+      - rabbitmq
+      - redis
+
+  celery:
+    image: app
+    pull_policy: never
+    command: celery -A app.celery worker --loglevel=info -f celery.logs
+    env_file:
+      - .env
+    volumes:
+      - ./app:/app
+      - ./data:/data
+    depends_on:
+      - rabbitmq
+      - redis
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: rabbit1
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+
+  redis:
+    image: redis:latest
+
+networks:
+  llm-mom:
+    driver: bridge

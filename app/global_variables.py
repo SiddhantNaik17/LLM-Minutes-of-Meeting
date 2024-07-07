@@ -1,4 +1,6 @@
 import os
+from pathlib import Path
+from urllib.parse import quote_plus
 
 DIRECTORY_NAME_MODEL = "models"
 DIRECTORY_NAME_TEMP = "temp"
@@ -7,7 +9,7 @@ DIRECTORY_NAME_UPLOADED_RECORDING_FILES = "uploaded_recordings"
 DIRECTORY_NAME_CONVERTED_RECORDING_FILES = "converted_audio_recordings"
 DIRECTORY_NAME_DATABASE = "db"
 
-ROOT_DIRECTORY = os.getcwd()
+ROOT_DIRECTORY = os.path.join(Path.cwd().parent, "data")
 
 BASE_MODEL_DIRECTORY = os.path.join(ROOT_DIRECTORY, DIRECTORY_NAME_MODEL)
 BASE_DATA_DIRECTORY = os.path.join(ROOT_DIRECTORY, DIRECTORY_NAME_DATA)
@@ -45,3 +47,10 @@ SUMMARY_MODELS = (
 
 DEFAULT_SUMMARY_MODEL = ("QuantFactory/Phi-3-mini-4k-instruct-GGUF", "Phi-3-mini-4k-instruct.Q5_0.gguf")
 SUMMARY_MODEL_PATH = os.path.join(BASE_MODEL_DIRECTORY, DEFAULT_SUMMARY_MODEL[0])
+
+RABBITMQ_USERNAME=os.getenv("RABBITMQ_USERNAME", "guest")
+RABBITMQ_PASSWORD=quote_plus(os.getenv("RABBITMQ_PASSWORD", "guest"))
+RABBITMQ_HOST=os.getenv("RABBITMQ_HOST", "localhost")
+RABBITMQ_PORT=os.getenv("RABBITMQ_PORT", 5672)
+REDIS_HOST=os.getenv("REDIS_HOST", "localhost")
+REDIS_PORT=os.getenv("REDIS_PORT", 6379)

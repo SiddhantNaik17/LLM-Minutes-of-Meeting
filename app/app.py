@@ -8,14 +8,15 @@ from celery import Celery
 
 from utils import convert_to_wav
 
-from global_variables import BASE_DATA_UPLOADED_RECORDINGS_DIRECTORY
+from global_variables import BASE_DATA_UPLOADED_RECORDINGS_DIRECTORY, RABBITMQ_USERNAME, RABBITMQ_PASSWORD, RABBITMQ_HOST, RABBITMQ_PORT, REDIS_HOST, REDIS_PORT
+from setup import create_directories, download_speech_model, download_summary_model
 
 
 def make_celery(app):
     celery = Celery(
         app.import_name,
-        backend='redis://localhost:6379/0',
-        broker='amqp://<user>:<password>$@localhost:5672//'
+        backend=f'redis://{REDIS_HOST}:{REDIS_PORT}/0',
+        broker=f'amqp://{RABBITMQ_USERNAME}:{RABBITMQ_PASSWORD}@{RABBITMQ_HOST}:{RABBITMQ_PORT}//'
     )
     celery.conf.update(app.config)
     class ContextTask(celery.Task):
@@ -83,4 +84,8 @@ def upload_file():
     return jsonify({'task_id': task.id})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    create_directories()
+    download_speech_model()
+    download_summary_model()
+
+    app.run(host="0.0.0.0", debug=True)

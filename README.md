@@ -31,6 +31,26 @@ The long term objective for this repository is also to develop a real time pytho
 
 ## 1. Setup and Installation
 
+### Using Docker Compose
+
+1. **Clone the GitHub Repository**
+
+   Open your terminal or command prompt and navigate to the directory where you want to clone the repository. Then run:
+
+   ```bash
+   git clone https://github.com/inboxpraveen/LLM-Minutes-of-Meeting
+   cd LLM-Minutes-of-Meeting
+   ```
+
+2. **Run Application and Services**
+
+   ```bash
+   docker compose up
+   ```
+
+
+### Manual Installation
+
 Before proceeding, ensure you have the following installed:
 
 - Ubuntu 22.04 or latest.

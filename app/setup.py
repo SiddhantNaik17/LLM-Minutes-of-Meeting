@@ -1,8 +1,5 @@
 import os
 
-import torch
-from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor
-
 from global_variables import (
     BASE_MODEL_DIRECTORY,
     BASE_DATA_DIRECTORY,
@@ -10,19 +7,24 @@ from global_variables import (
     BASE_TEMP_DIRECTORY,
     DEFAULT_SPEECH_MODEL,
     DEFAULT_SUMMARY_MODEL,
+    ROOT_DIRECTORY,
     SPEECH_MODEL_PATH,
     SUMMARY_MODEL_PATH,
     BASE_DATA_UPLOADED_RECORDINGS_DIRECTORY,
     BASE_DATA_CONVERTED_RECORDINGS_DIRECTORY
 )
 
-def create_directories(*dirs):
+os.environ["HF_HOME"] = os.path.join(ROOT_DIRECTORY, "cache")
+
+import torch
+from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor
+
+
+def create_directories():
+    dirs = [BASE_DATA_DIRECTORY, BASE_DATABASE_DIRECTORY, BASE_MODEL_DIRECTORY, BASE_TEMP_DIRECTORY, SPEECH_MODEL_PATH, SUMMARY_MODEL_PATH, BASE_DATA_UPLOADED_RECORDINGS_DIRECTORY, BASE_DATA_CONVERTED_RECORDINGS_DIRECTORY]
     for each_dir in dirs:
         if not os.path.exists(each_dir):
             os.makedirs(each_dir, exist_ok=True)
-
-
-create_directories(BASE_DATA_DIRECTORY, BASE_DATABASE_DIRECTORY, BASE_MODEL_DIRECTORY, BASE_TEMP_DIRECTORY, SPEECH_MODEL_PATH, SUMMARY_MODEL_PATH, BASE_DATA_UPLOADED_RECORDINGS_DIRECTORY, BASE_DATA_CONVERTED_RECORDINGS_DIRECTORY)
 
 
 def download_speech_model():
@@ -40,6 +42,3 @@ def download_speech_model():
 
 def download_summary_model():
     os.popen(f"huggingface-cli download '{DEFAULT_SUMMARY_MODEL[0]}' '{DEFAULT_SUMMARY_MODEL[1]}' --local-dir {SUMMARY_MODEL_PATH} --local-dir-use-symlinks False").read()
-
-download_speech_model()
-download_summary_model()
